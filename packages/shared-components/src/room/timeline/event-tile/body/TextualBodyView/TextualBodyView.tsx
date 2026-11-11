@@ -91,7 +91,8 @@ export interface TextualBodyViewSnapshot {
 
 export interface TextualBodyViewActions {
     /**
-     * Capture-phase click handler attached to the root message-body container.
+     * Click handler attached to the root message-body container. Runs in the bubble phase so
+     * that interactive children (e.g. user pills) can handle and stop the click first.
      */
     onRootClick?: MouseEventHandler<HTMLDivElement>;
     /**
@@ -278,7 +279,7 @@ export function TextualBodyView({
             <div
                 id={id}
                 className={rootClasses}
-                onClickCapture={vm.onRootClick}
+                onClick={vm.onRootClick}
                 dir="auto"
                 {...eventPresentationAttributes}
             >
@@ -294,7 +295,7 @@ export function TextualBodyView({
     }
 
     return (
-        <div id={id} className={rootClasses} onClickCapture={vm.onRootClick} {...eventPresentationAttributes}>
+        <div id={id} className={rootClasses} onClick={vm.onRootClick} {...eventPresentationAttributes}>
             {renderedBody}
             {urlPreviews}
         </div>

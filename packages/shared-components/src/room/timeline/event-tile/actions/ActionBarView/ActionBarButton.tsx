@@ -49,7 +49,15 @@ export function ActionBarButton({
         localRef.current.tabIndex = tabIndex;
     }, [tabIndex]);
 
-    const handleContextMenu = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    // Don't let action button clicks bubble up to the event tile, which has its own click handler
+    // (e.g. opening the thread in the threads list).
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
+        event.preventDefault();
+        event.stopPropagation();
+        onActivate?.(event.currentTarget);
+    };
+
+    const handleContextMenu =(event: React.MouseEvent<HTMLButtonElement>): void => {
         event.preventDefault();
         event.stopPropagation();
         onActivate?.(event.currentTarget);
@@ -67,7 +75,7 @@ export function ActionBarButton({
                 aria-pressed={ariaPressed}
                 aria-expanded={ariaExpanded}
                 disabled={disabled}
-                onClick={(event) => onActivate?.(event.currentTarget)}
+                onClick={handleClick}
                 onContextMenu={handleContextMenu}
                 onFocus={disabled ? undefined : onFocus}
                 className={styles.toolbar_item}
